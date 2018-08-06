@@ -13,6 +13,15 @@ function getVKShareCount(shareUrl, callback) {
     };
   }
 
+  // When we load openapi.js then window.VK is exist but don't has these properties
+  if (!window.VK.Share) {
+    window.VK.Share = {
+      count: (index, count) => window.VK.callbacks[index](count),
+    }
+
+    window.VK.callbacks = []
+  }
+
   const url = 'https://vk.com/share.php';
   const index = window.VK.callbacks.length;
 
