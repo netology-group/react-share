@@ -7,30 +7,34 @@ function getVKShareCount(shareUrl, callback) {
   if (!window.VK) {
     window.VK = {
       Share: {
-        count: (index, count) => window.VK.callbacks[index](count),
+        count: function count(index, _count) {
+          return window.VK.callbacks[index](_count);
+        }
       },
-      callbacks: [],
+      callbacks: []
     };
   }
 
   // When we load openapi.js then window.VK is exist but don't has these properties
   if (!window.VK.Share) {
     window.VK.Share = {
-      count: (index, count) => window.VK.callbacks[index](count),
+      count: function count(index, _count2) {
+        return window.VK.callbacks[index](_count2);
+      }
     };
 
     window.VK.callbacks = [];
   }
 
-  const url = 'https://vk.com/share.php';
-  const index = window.VK.callbacks.length;
+  var url = 'https://vk.com/share.php';
+  var index = window.VK.callbacks.length;
 
   window.VK.callbacks.push(callback);
 
   return jsonp(url + objectToGetParams({
     act: 'count',
-    index,
-    url: shareUrl,
+    index: index,
+    url: shareUrl
   }));
 }
 
